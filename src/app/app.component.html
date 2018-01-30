@@ -1,0 +1,391 @@
+<div class="container">
+    <div class="row" style="padding-left:5px; padding-right:5px;">
+        <div class="row">
+            <div class="col-md-12" style="font-weight:bold">
+                CLOSE-OLOGY MAP
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="text-align:justify">
+                What is close-ology? Close-ology is the analysis of oil and gas well production surrounding a proposed drilling location
+                to help determine the economic viability of an oil and gas drilling partnership.
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top:10px">
+        <div class="col-md-7">
+            <div class="row" style="font-weight:bold">
+                <div class="col-md-4" style="padding-top:15px; margin-left:-17px">
+                    <img src="assets/logo.png" height="45px">
+                </div>
+            </div>
+
+            <div class="row" style="margin-left:-27px; padding-top:15px">
+                <div class="col-md-3">
+                    <div class="row" style="text-align:center">
+                        <div class="row">
+                            <div class="col-md-12" title="The OWS Score is the average Return On Investment (ROI) based on reported oil and gas well production surrounding a proposed drilling location applied to a total investment amount, under specific terms described as Net Revenue Interest, oil and gas prices, and production expenses including applicable state taxes."
+                                style="font-size: 23px; font-weight: bold">
+                                SCORE
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12" style="font-size: 16px; font-weight: bold">
+                                AVERAGE ROI
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="text-align:center; padding-top:10px">
+                            <div class="round round-lg hollow ">{{ ows_score }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9" style="font-weight:bold;  padding-top:5px">
+                    <div class="row" style="min-height:60px">
+                        <div class="col-md-5">
+                            DRILLING LOCATION:
+                        </div>
+                        <div class="col-md-7">
+                            <img src="assets/star.png" style="margin-top:-13px; height:25px" class="image-responsive" />&nbsp;&nbsp;Midland #1
+                            <br>
+                            <b>LAT {{ lati }} &nbsp;&nbsp; LON {{ longi }}</b>
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="min-height:40px">
+                        <div class="col-md-5">
+                            RADIUS:
+                        </div>
+                        <div class="col-md-7">
+                            <input type="radio" id="m1" name="mile" value="1 Mile" (click)="getMiles('One Mile')"> 1 MILE &nbsp;
+                            <input type="radio" id="m2" name="mile" value="3 Miles" (click)="getMiles('Three Miles')"> 3 MILES &nbsp;
+                            <input type="radio" id="m3" name="mile" value="5 Miles" checked="checked" (click)="getMiles('Five Miles')"> 5 MILES
+                        </div>
+                    </div>
+
+                    <div class="row" style="min-height:40px">
+                        <div class="col-md-5">
+                            WELL COUNT:
+                        </div>
+                        <div class="col-md-7">
+                            {{ well_count }}
+                        </div>
+                    </div>
+
+                    <div class="row" style="min-height:40px">
+                        <div class="col-md-5">
+                            WELL DEPTH:
+                        </div>
+                        <div class="col-md-7">
+                            ALL
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5" style="margin-top:20px; padding-bottom:20px; background-color:rgb(240, 240,240); border-style:solid; border-width: 1px">
+            <div class="row" style="font-size:15px; padding: 10px 10px 0px 25px">
+                <div class="row" style="padding-top:2px">
+                    <div class="col-md-5">Partnership Name:</div>
+                    <div class="col-md-7">{{ partner_name }}</div>
+                </div>
+
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-5" style="padding-top: 5px;">Partnership Raise:</div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input type="number" [(ngModel)]="partnership_raise" min="0" (change)="calculate()" class="form-control" />
+                            <span class="input-group-addon" style="font-weight:bold">&nbsp;$&nbsp;</span>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-7">{{ investment_amount | currency:'USD' : true : '2.0-0' }}</div> -->
+                </div>
+
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-5" style="padding-top: 5px;">Partnership Terms:</div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input type="number" [(ngModel)]="partnership_term" min="0" (change)="calculate()" class="form-control" />
+                            <span class="input-group-addon" style="font-weight:bold">%</span>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-7">{{ nri_percentage | percent:'2.2-2' }} NRI (Net Revenue Interest)</div> -->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" style="padding-top:20px;font-weight:bold; text-align:center">
+                    THIS PARTNERSHIP WILL NEED TO GENERATE
+                    <br /> NET CASH FLOW OF
+                    <br />
+                    <span class="greenColor">{{ partnership_raise | currency:'USD' : true : '2.0-0' }} TO PAYOUT</span>
+                    <br /> ** AFTER: TERMS - PRODUCTION EXPENSES - TAXES **
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="Main-Div">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <agm-map gestureHandling="greedy" [scrollwheel]="false" [zoom]="zoom" [latitude]="lati" [longitude]="longi">
+                        <agm-marker *ngFor="let marker of latlong; let pos = index" iconUrl="{{ marker.url }}" (markerClick)="onMarkerClickLocation(pos)"
+                            [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+                    </agm-map>
+                </div>
+            </div>
+
+            <div class="row" style="padding-left:3px;">
+                <div class="col-md-12">
+                    <ion-range-slider type="single" min="0" max="{{well_count}}" [from]="green_count" (onChange)="myOnChange()" (onFinish)="myOnFinish($event)">
+                    </ion-range-slider>
+                </div>
+            </div>
+
+            <div class="row" style="font-weight: bold">
+                <div class="col-md-12" style="left:2px">
+                    <div id="tooltipDiv" style="position:inherit;" [ngStyle]="{'left': slider_percentage}">
+                        <p id="tooltipText"> {{ tooltip ? (tooltip | currency:'USD' : true : '1.2-2') : (tooltip) }}</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-9" style="font-size:14px;font-weight: bold">
+                    <img src="assets/pinkring.png" height="19px" width="20px" style="margin-left:-2px; margin-top:-8px"> SELECT A WELL FROM THE MAP TO VIEW INDIVIDUAL WELL DATA DIRECT FROM DRILLINGINFO.COM
+                </div>
+
+                <div class="col-md-3">
+                    <img src="assets/drilling.jpg" class="img-responsive" />
+                </div>
+            </div>
+
+            <div class="row" style="padding-left: 15px; padding-top:15px">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">API/UWI
+                                <b>:</b> {{ api_uwi }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Well/Lease Name
+                                <b>:</b> {{ lease_name }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Operator
+                                <b>:</b> {{ operator_name }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Status
+                                <b>:</b> {{ production_status }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">County
+                                <b>:</b> {{ county }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">State
+                                <b>:</b> {{ state }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Drill Type
+                                <b>:</b> {{ drill_type }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Measured Depth(TD)
+                                <b>:</b> {{ measured_depth ? (measured_depth | number) : (measured_depth) }}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="row" style="min-height:23px;">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Cumulative Oil
+                                <b>:</b> {{ cum_oil ? (cum_oil | number) : (cum_oil) }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Cumulative Gas
+                                <b>:</b> {{ cum_gas ? (cum_gas | number) : (cum_gas) }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">First Production
+                                <b>:</b> {{ first_prod_date }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Last Production
+                                <b>:</b> {{ last_prod_date }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Reservoir
+                                <b>:</b> {{ reservior }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Longitude
+                                <b>:</b> {{ long }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">Latitude
+                                <b>:</b> {{ lat }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <!-- 
+                    <div class="row">
+                        <div class="col-md-12" style="font-weight: bold; padding-top:15px; text-align:justify">
+                            CHANGE YOUR OIL PRICE, YOUR GAS PRICE, AND PRODUCTION EXPENSES TO EXPLORE PAY OUT SCENARIOS FOR THE WELL SELECTED
+                        </div>
+                    </div>
+                -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" style="font-size: 14px;">
+                            <thead>
+                                <tr style="background-color: #93d04f">
+                                    <th>PRODUCTION HISTORY BY MONTHS</th>
+                                    <th>FIRST 12</th>
+                                    <th>FIRST 24</th>
+                                    <th>FIRST 60</th>
+                                    <th>LAST 12</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Barrels of Oil</th>
+                                    <td>{{firsttwelveoil ? firsttwelveoil : '0'}}</td>
+                                    <td>{{firsttwentyfouroil ? firsttwentyfouroil : '0'}}</td>
+                                    <td>{{firstsixtyoil ? firstsixtyoil : '0'}}</td>
+                                    <td>{{lasttwelveoil ? lasttwelveoil : '0'}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">MCF of Gas</th>
+                                    <td>{{firsttwelvegas ? firsttwelvegas : '0'}}</td>
+                                    <td>{{firsttwentyfourgas ? firsttwentyfourgas : '0'}}</td>
+                                    <td>{{firstsixtygas ? firstsixtygas : '0'}}</td>
+                                    <td>{{lasttwelvegas ? lasttwelvegas : '0'}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ROI</th>
+                                    <td class="greenColor" style="font-weight: bold">{{roifirsttwelve}}</td>
+                                    <td class="greenColor" style="font-weight: bold">{{roifirsttwentyfour}}</td>
+                                    <td class="greenColor" style="font-weight: bold">{{roifirstsixty}}</td>
+                                    <td class="greenColor" style="font-weight: bold">{{roilasttwelve}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">Your Oil Price:
+                        <i class="glyphicon glyphicon-question-sign" title="Any amount, in dollars, that you estimate the oil price to be. Price of the Estimated Daily Oil Production to be sold."></i>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <input type="number" [(ngModel)]="oil_price" min="0" (change)="calculate()" class="form-control" />
+                            <span class="input-group-addon" style="font-weight:bold">&nbsp;$&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:15px">
+                    <div class="col-md-6">Your Gas Price:
+                        <i class="glyphicon glyphicon-question-sign" title="Any amount, in dollars, that you estimate the gas price to be. Price of the Estimated Daily Gas Production to be sold."></i>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <input type="number" [(ngModel)]="gas_price" min="0" (change)="calculate()" class="form-control" />
+                            <span class="input-group-addon" style="font-weight:bold">&nbsp;$&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-6">Production Expenses:
+                        <i class="glyphicon glyphicon-question-sign" title="Production Expenses refers to the cost incurred by a well to produce and sell oil and gas. Production Expenses includes a variety of costs including, but not limited to, labor, raw materials, consumable manufacturing supplies and general overhead."></i>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <input type="number" [(ngModel)]="production_expenses" min="0" max="100" (change)="calculate()" class="form-control" />
+                            <span class="input-group-addon" style="font-weight:bold">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-6">
+                        Estimated Net Cash Flow:
+                        <i class="glyphicon glyphicon-question-sign" title="Estimated Net Cash Flow = (((Cumulative Oil * Your Oil Price)-4.6%) + ((Cumulative Gas * Your Gas Price)-7.5%) * NRI%) - Production Expenses%"></i>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span [ngStyle]="{'color': textcolor}" style="font-weight:bold"> {{ estimated_gross_cash_flow | currency:'USD' : true : '1.2-2' }}</span>
+                        <small>(Includes {{ nri_percentage | percent:'1.2-2'}} NRI and {{ tax | percent:'1.2-2' }} Texas Oil Tax
+                            and {{ tax_gas | percent:'1.2-2' }} Texas Gas Tax)</small>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-6">
+                        Estimated Over/Under Pay Out:
+                        <i class="glyphicon glyphicon-question-sign" title="Estimated Over/Under Pay Out = (Estimated Net Cash Flow - Pay Out Amount)"></i>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span [ngStyle]="{'color': color}" style="font-weight:bold"> {{ potential_profit_loss | currency:'USD' : true : '1.2-2' }}</span> &nbsp;&nbsp;
+                        <b>ROI &nbsp;
+                            <i class="glyphicon glyphicon-question-sign" title="ROI = (Estimated Net Cash Flow/ Hypothetical Investment Amount)"></i>
+                            &nbsp;
+                            <span class="greenColor">{{ roi_percentage }}</span>
+                        </b>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-12" style="font-size:14px; text-align:justify; font-weight:bold">
+                        NOTE--CHANGING YOUR OIL PRICE, YOUR GAS PRICE, AND PRODUCTION EXPENSES WILL COMPARE ALL WELLS IN THE WELL COUNT TO THE DATA
+                        ENTERED, WHICH EFFECTS THE OILWELLSTORE.COM SCORE
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
